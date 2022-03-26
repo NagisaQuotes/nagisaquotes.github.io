@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: '14.x'
+
+jobs:
+  backup:
+    name: Backup
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Execute backup script
+      run: |
+        npm install
+        npm run backup --if-present
+    - uses: actions/upload-artifact@v2
+      with:
+        name: quote-bak
+        path: |
+          quotes
+          !quotes/empty
